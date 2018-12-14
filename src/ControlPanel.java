@@ -1,9 +1,11 @@
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.Timer;
 
 public class ControlPanel extends JPanel implements ActionListener{
@@ -11,21 +13,35 @@ public class ControlPanel extends JPanel implements ActionListener{
 	private CellField cf;
 
 	private JButton player = new JButton("start");
+	private JButton reset = new JButton("reset");
+	
+	private JSlider simSpeed = new JSlider(1,5,1);
 	private Timer t;
 
 	public ControlPanel(GraphicsPanel gpanel, CellField cfield) {
 		this.gp = gpanel;
 		this.cf = cfield;
+		
+		setLayout(new GridLayout(1,2));
+		JPanel left = new JPanel();
+		JPanel right = new JPanel();
+		add(left);
+		add(right);
 
-		t = new Timer(100, this);
+		t = new Timer(100, cf);
 		t.setActionCommand("timer");
-		setEventButton(player,"start");
-	}
+		t.addActionListener(gp);
 
-	private void setEventButton(JButton btn, String cmd) {
-		btn.addActionListener(this);
-		btn.setActionCommand(cmd);
-		add(btn);
+		player.addActionListener(this);
+		player.setActionCommand("start");
+		left.add(player);
+		
+		reset.addActionListener(cf);
+		reset.addActionListener(gp);
+		left.add(reset);
+		
+		left.add(simSpeed);
+		
 	}
 
 	@Override
@@ -39,8 +55,11 @@ public class ControlPanel extends JPanel implements ActionListener{
 			t.stop();
 			player.setText("start");
 			player.setActionCommand("start");
+		}else if(cmd.equals("reset")) {
+			t.stop();
+			
+		
 		}else if(cmd.equals("timer")) {
-			cf.applyRules();
 			gp.repaint();
 		}
 	}
