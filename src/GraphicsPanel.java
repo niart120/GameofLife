@@ -2,13 +2,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
-public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionListener{
+public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
 	private CellField cf;
 	private short[][] gpMatrix;
 	private Rectangle[][] cells;
@@ -28,9 +30,10 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 		Graphics2D g2 = (Graphics2D)g;
 		paintCells(g2);
 		
-		g2.setColor(Color.RED);
-		g2.draw(cells[mouseX][mouseY]);
-		
+		if(mouseX!=-1) {
+			g2.setColor(Color.RED);
+			g2.draw(cells[mouseX][mouseY]);
+		}
 		g2.setColor(Color.DARK_GRAY);		
 		g2.drawRect(0, 0, getWidth(), getHeight()-2);
 	}
@@ -88,6 +91,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		mouseX = -1;
+		mouseY = -1;
+		repaint();
 	}
 
 	public void setCells() {
@@ -98,5 +104,10 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 				cells[i][j] = new Rectangle(length*i,length*j,length,length);
 			}
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		repaint();
 	}
 }
