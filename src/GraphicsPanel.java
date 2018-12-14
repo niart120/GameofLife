@@ -12,16 +12,30 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 	private CellField cf;
 	private short[][] gpMatrix;
 	private Rectangle[][] cells;
+	
+	private int mouseX, mouseY;
 
 	public GraphicsPanel(CellField cellfield) {
 		this.cf = cellfield;
 		this.gpMatrix = cf.getMatrix();
 		cells = new Rectangle[cf.size][cf.size];
 		setCells();
+		addMouseMotionListener(this);
+		addMouseListener(this);
 	}
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
+		paintCells(g2);
+		
+		g2.setColor(Color.RED);
+		g2.draw(cells[mouseX][mouseY]);
+		
+		g2.setColor(Color.DARK_GRAY);		
+		g2.drawRect(0, 0, getWidth(), getHeight()-2);
+	}
+	
+	private void paintCells(Graphics2D g2) {
 		for(int i=0;i<cells.length;i++) {
 			for(int j=0;j<cells[i].length;j++) {
 				if(gpMatrix[i][j]==1) {
@@ -30,6 +44,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 					g2.setColor(Color.black);
 				}
 				g2.fill(cells[i][j]);
+				
 			}
 		}
 	}
@@ -40,14 +55,27 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		for(int i=0;i<cells.length;i++) {
+			for(int j=0;j<cells[i].length;j++) {
+				if(cells[i][j].contains(e.getPoint())){
+					mouseX = i;
+					mouseY = j;
+					repaint();
+					return;
+				}
+			}
+		}
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		cf.changeState(mouseX, mouseY);
+		repaint();
 	}
 
 	@Override

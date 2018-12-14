@@ -84,4 +84,12 @@ public class CellField {
 	public short[][] getMatrix(){
 		return matrix;
 	}
+	
+	public void changeState(int i, int j) {
+		if(matrix[i][j] == 1) {
+			matrix[i][j] = 0;
+		}else {
+			matrix[i][j] = 1;
+		}
+	}
 }
