@@ -1,10 +1,12 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CellField {
+public class CellField implements ActionListener{
 	private short[][] matrix;
 	private short[][] bufferedMatrix;
 
 	int size;
-	public CellField(){
+	public CellField() {
 		size = 20;
 		matrix = new short[size][size];
 		bufferedMatrix = new short[size][size];
@@ -91,5 +93,14 @@ public class CellField {
 		}else {
 			matrix[i][j] = 1;
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String cmd = arg0.getActionCommand();
+		if(cmd.equals("timer")) {
+			applyRules();
+		}
+		
 	}
 }
