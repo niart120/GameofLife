@@ -19,8 +19,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 
 	public GraphicsPanel(CellField cellfield) {
 		this.cf = cellfield;
-		this.gpMatrix = cf.getMatrix();
-		cells = new Rectangle[cf.size][cf.size];
+		updateGPMatrix();
 		setCells();
 		addMouseMotionListener(this);
 		addMouseListener(this);
@@ -39,6 +38,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 	}
 	
 	private void paintCells(Graphics2D g2) {
+		gpMatrix = cf.getMatrix();
 		for(int i=0;i<cells.length;i++) {
 			for(int j=0;j<cells[i].length;j++) {
 				if(gpMatrix[i][j]==1) {
@@ -48,6 +48,22 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 				}
 				g2.fill(cells[i][j]);
 				
+			}
+		}
+	}
+	
+	public void updateGPMatrix() {
+		gpMatrix = cf.getMatrix();
+	}
+	
+	public void setCells() {
+		cells = new Rectangle[cf.size][cf.size];
+		double length = 400/cf.size;
+		for(int i=0;i<cells.length;i++) {
+			for(int j=0;j<cells[i].length;j++) {
+				int lengthX = (int) (length*(i+1)-length*i);
+				int lengthY = (int) (length*(j+1)-length*j);
+				cells[i][j] = new Rectangle((int)(length*i),(int)(length*j),lengthX,lengthY);
 			}
 		}
 	}
@@ -94,16 +110,6 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 		mouseX = -1;
 		mouseY = -1;
 		repaint();
-	}
-
-	public void setCells() {
-		cells = new Rectangle[cf.size][cf.size];
-		int length = 400/cf.size;
-		for(int i=0;i<cells.length;i++) {
-			for(int j=0;j<cells[i].length;j++) {
-				cells[i][j] = new Rectangle(length*i,length*j,length,length);
-			}
-		}
 	}
 
 	@Override

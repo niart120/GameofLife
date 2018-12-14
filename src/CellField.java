@@ -7,7 +7,7 @@ public class CellField implements ActionListener{
 
 	int size;
 	public CellField() {
-		size = 20;
+		size = 40;
 		matrix = new short[size][size];
 		bufferedMatrix = new short[size][size];
 
@@ -100,7 +100,18 @@ public class CellField implements ActionListener{
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("timer")) {
 			applyRules();
+			return;
+		}
+		if(cmd.equals("reset")) {
+			setAtrandom();
 		}
 		
+	}
+	
+	public void setSize(int t) {
+		this.size = t;
+		matrix = new short[size][size];
+		bufferedMatrix = new short[size][size];
+		setAtrandom();
 	}
 }
