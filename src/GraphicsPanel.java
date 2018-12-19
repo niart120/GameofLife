@@ -9,6 +9,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
+import javax.swing.JColorChooser;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
 	private CellField cf;
@@ -16,6 +19,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 	private Rectangle[][] cells;
 	
 	private int mouseX, mouseY;
+	
+	private Color dead = Color.BLACK;
+	private Color alive = Color.WHITE;
 
 	public GraphicsPanel(CellField cellfield) {
 		this.cf = cellfield;
@@ -42,12 +48,13 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 		for(int i=0;i<cells.length;i++) {
 			for(int j=0;j<cells[i].length;j++) {
 				if(gpMatrix[i][j]==1) {
-					g2.setColor(Color.white);
+					g2.setColor(alive);
 				}else {
-					g2.setColor(Color.black);
+					g2.setColor(dead);
 				}
 				g2.fill(cells[i][j]);
-				
+				g2.setColor(new Color(0.0f,0.0f,1.0f,0.25f));
+				g2.draw(cells[i][j]);
 			}
 		}
 	}
@@ -58,7 +65,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 	
 	public void setCells() {
 		cells = new Rectangle[cf.size][cf.size];
-		double length = 400/cf.size;
+		double length = 480/cf.size;
 		for(int i=0;i<cells.length;i++) {
 			for(int j=0;j<cells[i].length;j++) {
 				int lengthX = (int) (length*(i+1)-length*i);
@@ -114,6 +121,21 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		String cmd = e.getActionCommand();
+		if(cmd.equals("ac")) {
+			alive = JColorChooser.showDialog(this, "Alive Cell Color", alive);
+		} else if(cmd.equals("dc")) {
+			dead = JColorChooser.showDialog(this, "Dead Cell Color", dead);
+		}
 		repaint();
 	}
+
+	public Color getDead() {
+		return dead;
+	}
+
+	public Color getAlive() {
+		return alive;
+	}
+
 }

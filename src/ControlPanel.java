@@ -7,6 +7,7 @@ import javax.swing.event.ChangeListener;
 
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.Timer;
@@ -17,10 +18,15 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 	private CellField cf;
 
 	private JButton player = new JButton("start");
-	private JButton reset = new JButton("reset");
+	private JButton random = new JButton("random");
+	private JButton clear = new JButton("clear");
 	
 	private JSlider simSpeed = new JSlider(1,5,1);
 	private JSlider scale = new JSlider(20,80,40);
+	
+	private JButton aliveColor = new JButton("alive cell");
+	private JButton deadColor = new JButton("dead cell");
+	
 	private Timer t;
 
 	public ControlPanel(GraphicsPanel gpanel, CellField cfield) {
@@ -41,9 +47,14 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 		player.setActionCommand("start");
 		left.add(player);
 		
-		reset.addActionListener(cf);
-		reset.addActionListener(gp);
-		left.add(reset);
+		random.addActionListener(cf);
+		random.addActionListener(gp);
+		random.addActionListener(this);
+		left.add(random);
+		
+		clear.addActionListener(cf);
+		clear.addActionListener(gp);
+		left.add(clear);
 		
 		left.add(new Label("GameSpeed"));
 		
@@ -56,13 +67,25 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 		
 		left.add(new Label("scale"));
 		
-		scale.setMajorTickSpacing(10);
+		scale.setMajorTickSpacing(20);
 		scale.setSnapToTicks(true);
 		scale.setPaintLabels(true);
 		scale.setPaintTicks(true);
 		scale.addChangeListener(this);
 		
 		left.add(scale);
+		
+		left.add(new Label("Cell Color"));
+			
+		
+		
+		aliveColor.setActionCommand("ac");
+		aliveColor.addActionListener(gp);
+		left.add(aliveColor);
+		
+		deadColor.setActionCommand("dc");
+		deadColor.addActionListener(gp);
+		left.add(deadColor);
 		
 	}
 
@@ -71,16 +94,29 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 		String cmd = e.getActionCommand();
 		if(cmd.equals("start")) {
 			t.start();
+			compEnabled(false);
 			player.setText("stop");
 			player.setActionCommand("stop");
 		}else if(cmd.equals("stop")) {
 			t.stop();
+			compEnabled(true);
 			player.setText("start");
 			player.setActionCommand("start");
-		}else if(cmd.equals("reset")) {
+		}else if(cmd.equals("clear")) {
+			t.stop();	
+			compEnabled(true);
+			player.setText("start");
+			player.setActionCommand("start");
+		}else if(cmd.equals("random")) {
 			t.stop();
-			
+			compEnabled(true);
+			player.setText("start");
+			player.setActionCommand("start");
 		}
+	}
+	
+	public void compEnabled(boolean enabled) {
+		scale.setEnabled(enabled);
 	}
 	
 	public void stateChanged(ChangeEvent e) {
@@ -94,6 +130,7 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 			gp.setCells();
 			gp.repaint();
 		}
+		
 		
 	}
 }

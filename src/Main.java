@@ -10,7 +10,7 @@ public class Main {
 		ControlPanel cp = new ControlPanel(gp,cf);
 
 		fr.setTitle("Game of Life");
-		fr.setSize(406, 832);
+		fr.setSize(486, 992);
 		fr.setLocation(300, 100);
 		fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fr.setResizable(false);

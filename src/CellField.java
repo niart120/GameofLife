@@ -11,8 +11,7 @@ public class CellField implements ActionListener{
 		matrix = new short[size][size];
 		bufferedMatrix = new short[size][size];
 
-		setAtrandom();
-		//resetMatrix();
+		resetMatrix();
 	}
 
 	public void applyRules() {
@@ -102,8 +101,13 @@ public class CellField implements ActionListener{
 			applyRules();
 			return;
 		}
-		if(cmd.equals("reset")) {
+		if(cmd.equals("random")) {
 			setAtrandom();
+			return;
+		}
+		if(cmd.equals("clear")){
+			resetMatrix();
+			return;
 		}
 		
 	}
