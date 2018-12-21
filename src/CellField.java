@@ -2,14 +2,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CellField implements ActionListener{
-	private short[][] matrix;
-	private short[][] bufferedMatrix;
+	private boolean[][] matrix;
+	private boolean[][] bufferedMatrix;
 
 	int size;
 	public CellField() {
 		size = 40;
-		matrix = new short[size][size];
-		bufferedMatrix = new short[size][size];
+		matrix = new boolean[size][size];
+		bufferedMatrix = new boolean[size][size];
 
 		resetMatrix();
 	}
@@ -19,14 +19,10 @@ public class CellField implements ActionListener{
 		for(int i=0;i<matrix.length;i++) {
 			for(int j=0;j<matrix[i].length;j++) {
 				int c = countNeighbours(i,j);
-				if(matrix[i][j]==1) {
-					if(c!=2&&c!=3) {
-						bufferedMatrix[i][j] = 0;
-					}
+				if(matrix[i][j]) {
+					bufferedMatrix[i][j] = c==2||c==3;
 				}else {
-					if(c==3) {
-						bufferedMatrix[i][j] = 1;
-					}
+					bufferedMatrix[i][j] = c==3;
 				}
 			}
 		}
@@ -36,7 +32,7 @@ public class CellField implements ActionListener{
 	private void resetMatrix() {
 		for(int i=0;i<matrix.length;i++) {
 			for(int j=0;j<matrix[i].length;j++) {
-				matrix[i][j] = 0;
+				matrix[i][j] = false;
 			}
 		}
 	}
@@ -44,11 +40,7 @@ public class CellField implements ActionListener{
 	private void setAtrandom() {
 		for(int i=0;i<matrix.length;i++) {
 			for(int j=0;j<matrix[i].length;j++) {
-				if(Math.random()>0.7) {
-					matrix[i][j] = 1;
-				}else {
-					matrix[i][j] = 0;
-				}
+				matrix[i][j] = Math.random()>0.7;
 			}
 		}
 	}
@@ -59,10 +51,10 @@ public class CellField implements ActionListener{
 			for(int j=-1;j<2;j++) {
 				int x_ = (size+x+i)%size;
 				int y_ = (size+y+j)%size;
-				c += matrix[x_][y_];
+				if(matrix[x_][y_]) c++;
 			}
 		}
-		c -= matrix[x][y];
+		if(matrix[x][y])c--;
 		return c;
 	}
 
@@ -82,16 +74,12 @@ public class CellField implements ActionListener{
 		}
 	}
 
-	public short[][] getMatrix(){
+	public boolean[][] getMatrix(){
 		return matrix;
 	}
 	
 	public void changeState(int i, int j) {
-		if(matrix[i][j] == 1) {
-			matrix[i][j] = 0;
-		}else {
-			matrix[i][j] = 1;
-		}
+		matrix[i][j] = !matrix[i][j];
 	}
 
 	@Override
@@ -114,8 +102,8 @@ public class CellField implements ActionListener{
 	
 	public void setSize(int t) {
 		this.size = t;
-		matrix = new short[size][size];
-		bufferedMatrix = new short[size][size];
-		setAtrandom();
+		matrix = new boolean[size][size];
+		bufferedMatrix = new boolean[size][size];
 	}
+	
 }

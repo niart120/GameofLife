@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 
 public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
 	private CellField cf;
-	private short[][] gpMatrix;
+	private boolean[][] gpMatrix;
 	private Rectangle[][] cells;
 	
 	private int mouseX, mouseY;
@@ -47,7 +47,7 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 		gpMatrix = cf.getMatrix();
 		for(int i=0;i<cells.length;i++) {
 			for(int j=0;j<cells[i].length;j++) {
-				if(gpMatrix[i][j]==1) {
+				if(gpMatrix[i][j]) {
 					g2.setColor(alive);
 				}else {
 					g2.setColor(dead);

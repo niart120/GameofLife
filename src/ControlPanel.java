@@ -73,9 +73,10 @@ public class ControlPanel extends JPanel implements ActionListener, ChangeListen
 		scale.setPaintTicks(true);
 		scale.addChangeListener(this);
 		
+	
 		left.add(scale);
 		
-		left.add(new Label("Cell Color"));
+		left.add(new Label("Cell State Color"));
 			
 		
 		
