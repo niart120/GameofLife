@@ -18,6 +18,9 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 	private boolean[][] gpMatrix;
 	private Rectangle[][] cells;
 	
+	private Pattern[] patterns = new Pattern[8];
+	
+	private int mouseMode;
 	private int mouseX, mouseY;
 	
 	private Color dead = Color.BLACK;
@@ -27,6 +30,8 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 		this.cf = cellfield;
 		updateGPMatrix();
 		setCells();
+		importPatterns();
+		
 		addMouseMotionListener(this);
 		addMouseListener(this);
 	}
@@ -52,11 +57,24 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 				}else {
 					g2.setColor(dead);
 				}
+				//matrix line
 				g2.fill(cells[i][j]);
 				g2.setColor(new Color(0.0f,0.0f,1.0f,0.25f));
 				g2.draw(cells[i][j]);
 			}
 		}
+	}
+	
+	private void paintPointer(Graphics2D g2) {
+		if(mouseX==-1) return;
+		
+		if(mouseMode==-1) {
+			g2.setColor(Color.RED);
+			g2.draw(cells[mouseX][mouseY]);
+		}else {
+			
+		}
+		
 	}
 	
 	public void updateGPMatrix() {
@@ -72,6 +90,12 @@ public class GraphicsPanel extends JPanel implements MouseListener, MouseMotionL
 				int lengthY = (int) (length*(j+1)-length*j);
 				cells[i][j] = new Rectangle((int)(length*i),(int)(length*j),lengthX,lengthY);
 			}
+		}
+	}
+	
+	public void importPatterns() {
+		for(int i=0;i<patterns.length;i++) {
+			patterns[i] = new Pattern(i+".txt");
 		}
 	}
 
